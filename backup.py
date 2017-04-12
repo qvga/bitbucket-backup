@@ -126,7 +126,7 @@ def update_repo(repo, backup_dir, with_wiki=False, prune=False):
     if scm == 'hg':
         command = 'hg pull -u'
     if scm == 'git':
-        command = 'git remote update'
+        command = 'git branch -a | grep -v HEAD | perl -ne \'chomp($_); s|^\*?\s*||; if (m|(.+)/(.+)| && not $d{$2}) {print qq(git branch --track $2 $1/$2\n)} else {$d{$_}=1}\' | csh -xfs && git fetch --all && git pull --all'
         if prune:
             command = '%s %s' % (command, '--prune')
     if not command:
